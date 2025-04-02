@@ -44,28 +44,39 @@ class TableStringBuilder<T> {
         return columnWidths;
     }
 
-    public String createString(Iterable<? extends T> elements) {
-        List<Integer> columnWidths = computeColumnWidths(elements);
-
+    private String createBorders(List<Integer> columnWidths) {
         StringBuilder sb = new StringBuilder();
-        for (int c=0; c<columnNames.size(); c++) {
-            if (c > 0) {
-                sb.append("|");
-            }
-            String format = "%"+columnWidths.get(c)+"s";
-            sb.append(String.format(format, columnNames.get(c)));
-        }
-        sb.append("\n");
-        for (int c=0; c<columnNames.size(); c++) {
+        for (int c = 0; c < columnNames.size(); c++) {
             if (c > 0) {
                 sb.append("+");
             }
             sb.append(padLeft("", '-', columnWidths.get(c)));
         }
-        sb.append("\n");
+        return sb.toString();
+    }
+
+    public String createString(Iterable<? extends T> elements) {
+        List<Integer> columnWidths = computeColumnWidths(elements);
+
+        StringBuilder sb = new StringBuilder();
+
+        sb.append(createBorders(columnWidths));
+        sb.append("+\n");
+
+        for (int c = 0; c < columnNames.size(); c++) {
+            if (c > 0) {
+                sb.append("|");
+            }
+            String format = "%" + columnWidths.get(c) + "s";
+            sb.append(String.format(format, columnNames.get(c)));
+        }
+
+        sb.append("|\n");
+        sb.append(createBorders(columnWidths));
+        sb.append("+\n");
 
         for (T element : elements) {
-            for (int c=0; c<columnNames.size(); c++) {
+            for (int c = 0; c < columnNames.size(); c++) {
                 if (c > 0) {
                     sb.append("|");
                 }
@@ -74,8 +85,12 @@ class TableStringBuilder<T> {
                 String s = f.apply(element);
                 sb.append(String.format(format, s));
             }
-            sb.append("\n");
+            sb.append("|\n");
         }
+
+        sb.append(createBorders(columnWidths));
+        sb.append("+\n");
+
         return sb.toString();
     }
 }
