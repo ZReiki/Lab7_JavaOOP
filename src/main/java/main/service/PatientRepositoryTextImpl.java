@@ -1,5 +1,6 @@
 package main.service;
 
+import main.io.Printer;
 import main.logic.PatientRepository;
 
 import main.logic.*;
@@ -9,6 +10,8 @@ import java.nio.file.Files;
 import java.util.*;
 
 public class PatientRepositoryTextImpl implements PatientRepository {
+    private final Printer printer = new Printer();
+
     @Override
     public void outputList(List<Patient> patients, File file){
         try(PrintWriter out = new PrintWriter(Files.newBufferedWriter(file.toPath(), StandardCharsets.UTF_8))){
@@ -24,6 +27,7 @@ public class PatientRepositoryTextImpl implements PatientRepository {
                             patient.getCurrentYearVisitCount() + ";");
                 }
             }
+            printer.successWriteToFile();
         }catch (IOException e){
             System.out.println("File not found");
         }
@@ -55,6 +59,7 @@ public class PatientRepositoryTextImpl implements PatientRepository {
                     ));
                 }
             }
+            printer.successReadFromFile();
         }catch (IOException e){
             System.out.println("File not found");
         }

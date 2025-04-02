@@ -3,6 +3,7 @@ package main.service;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.*;
+import main.io.Printer;
 import main.logic.Patient;
 import main.logic.PatientRepository;
 
@@ -12,11 +13,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PatientRepositoryJSONImpl implements PatientRepository {
+    private final Printer printer = new Printer();
+
     @Override
     public void outputList(List<Patient> patients, File file) {
         try (Writer writer = new FileWriter(file)) {
             Gson gson = new GsonBuilder().setPrettyPrinting().create();
             gson.toJson(patients, writer);
+            printer.successWriteToFile();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -33,6 +37,7 @@ public class PatientRepositoryJSONImpl implements PatientRepository {
         try {
             Gson gson = new GsonBuilder().setPrettyPrinting().create();
             Type listType = new TypeToken<ArrayList<Patient>>() {}.getType();
+            printer.successReadFromFile();
             return gson.fromJson(new FileReader(file), listType);
         } catch (IOException e) {
             throw new RuntimeException(e);
