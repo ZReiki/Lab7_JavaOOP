@@ -1,13 +1,17 @@
 package main.service;
 
 import main.io.Printer;
+import main.logic.Patient;
 import main.logic.PatientRepository;
 
-import main.logic.*;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class PatientRepositoryTextImpl implements PatientRepository {
     private final Printer printer = new Printer();
@@ -24,7 +28,7 @@ public class PatientRepositoryTextImpl implements PatientRepository {
                             patient.getMedicalRecordNumber() + "; " +
                             patient.getMedicalDiagnosis() + "; " +
                             patient.getLastDateVisit() + "; " +
-                            patient.getCurrentYearVisitCount() + ";");
+                            patient.getCurrentYearVisitCount());
                 }
             }
             printer.successWriteToFile();
